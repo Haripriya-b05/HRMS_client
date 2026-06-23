@@ -5,7 +5,7 @@ import heroImg from "./assets/hero.png";
 import "./App.css";
 import LoginPage from "./Component/LoginPage/LoginPage";
 import Navbar from "./Component/NavBar/NavBar";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes,Navigate } from "react-router-dom";
 import SignupPage from "./Component/SignupPage/SignupPage";
 import Panel from "./Component/Admin/Panel";
 import Dashboard from "./Component/Admin/Dashboard";
@@ -28,7 +28,8 @@ function App() {
         {/* <Navbar/> */}
 
         <Routes>
-          <Route path="/" element={<Hero />} />
+          {/* <Route path="/" element={<Hero />} /> */}
+          <Route path="/" element={<Navigate to="/login" replace/>} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/panel" element={<Panel />}>
