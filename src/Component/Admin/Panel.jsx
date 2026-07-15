@@ -1,7 +1,37 @@
 import React from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+let baseUrl=import.meta.env.VITE_BASE_URL
+import { useState,useEffect } from "react";
+import axios from "axios"
+import { useDispatch } from "react-redux";
+import { setEmployeeData } from "../../Features/Employee/EmployeeSlice";
 
 export default function Pannel() {
+
+  let  [employeeFormData,setEmployeeFormData]=useState([]);
+
+  let dispatch=useDispatch();
+
+
+
+  useEffect(()=>{
+    axios.get(`${baseUrl}/get/fetchEmployee`).then((res)=>{
+      let {success,message,data}=res.data;
+      setEmployeeFormData(data);
+      console.log(data)
+
+      dispatch(setEmployeeData(data))
+
+      
+    }).catch((err)=>{
+      let {success,message}=err.response.data;
+      console.log(message)
+    })
+  },[])
+
+
+
+
     const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-slate-100 text-slate-900 sticky top-0">

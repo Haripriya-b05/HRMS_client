@@ -1,6 +1,11 @@
 import React from 'react'
 
+import { useSelector } from 'react-redux'
+
 const Attendance = () => {
+
+  let selector=useSelector((state)=>state.employee.employeeData)
+  console.log(selector)
   return (
     <div>
           <main className="space-y-6">

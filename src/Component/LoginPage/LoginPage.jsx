@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Link,useNavigate } from "react-router-dom";
+import axios from "axios";
+
+let baseUrl=import.meta.env.VITE_BASE_URL
 
 const LoginPage = () => {
   let [loginData, setLoginData] = useState({});
@@ -20,10 +23,21 @@ const LoginPage = () => {
     if (!loginData.email) {
       formError.email = "email is required!";
     }
-    if (!loginData.password) {
+    else if (!loginData.password) {
       formError.password = "password is required!";
     }
-    if (loginData.email && loginData.password) {
+    else {
+      axios.post(`${baseUrl}/login`,loginData).then((res)=>{
+
+        localStorage.setItem("auth_token",res.data.token)
+
+        alert("Welcome to dashboard");
+        navigate("/panel")
+
+      }).catch((error)=>{
+        setError({message:error.response?.data?.message});
+      })
+
       console.log("API data:", loginData);
     }
     setError(formError); // jo bhi form error oj=bj mein hai usko hum error wale state mein store kar rahe hai
@@ -31,10 +45,8 @@ const LoginPage = () => {
 
   let handleClick = () => {
     handleValidate(loginData); //jab login button click hoga toh pehle ye validatin check karega then hi data ko ko print karega console pe
-    if (loginData.email && loginData.password) {
-    navigate("/panel");
-  }
-    // console.log(loginData);
+    
+    
   };
 
   
@@ -73,7 +85,7 @@ const LoginPage = () => {
             </div>
 
             
-
+            {error.message && (<p className="text-red-500 text-sm">{error.message}</p>)}
             <button
               className="w-full h-10 bg-blue-500 text-white rounded-md hover:bg-blue-600"
               onClick={handleClick}

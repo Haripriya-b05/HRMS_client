@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
+import axios from "axios";
+let baseUrl=import.meta.env.VITE_BASE_URL
+
 
 const SignupPage = () => {
   let [signData, setSignData] = useState({});
   let [error, setError] = useState({});
+   const navigate = useNavigate();
 
   let handleSignChange = (e) => {
     // console.log("handle change");
@@ -15,31 +19,43 @@ const SignupPage = () => {
   let handleValidate = (signData) => {
     let formError = {}; 
 
-    if (!signData.fname) {
-      formError.fname = "name is required!";
+    if (!signData.name) {
+      formError.name = "name is required!";
     }
-    if (!signData.email) {
+    else if (!signData.email) {
       formError.email = "email is required!";
     }
-    if (!signData.pass) {
-      formError.pass = "password is required!";
+    else if (!signData.password) {
+      formError.password = "password is required!";
     }
-    if (!signData.cpass) {
-      formError.cpass = "confirm password is required!";
+    else if (!signData.confirmPassword) {
+      formError.confirmPassword = "confirm password is required!";
     }
 
-    if(signData.pass!=signData.cpass){
+    else if(signData.password!=signData.confirmPassword){
       formError.invalid="both password doesn't match!";
 
     }
-    if (signData.fname && signData.pass && signData.email && signData.cpass && (signData.pass==signData.cpass)) {
+    else  {
+      axios.post(`${baseUrl}/signup`,signData).then((res)=>{
+        alert("Sign up Successfully");
+         navigate("/login")
+       
+      }).catch((error)=>{
+        alert(error.response?.data?.message)
+      })
+
+
       console.log("API data:", signData);
+      // navigate("/login")
+
     }
     setError(formError); 
   };
 
   let handleClick = () => {
     handleValidate(signData); 
+   
 
     // console.log(loginData);
   };
@@ -60,9 +76,9 @@ const SignupPage = () => {
                 className="w-full border border-gray-300 h-10 px-3 rounded"
                 placeholder="Enter your full name"
                 onChange={handleSignChange}
-                name="fname"
+                name="name"
               />
-              {error.fname && (<p className="text-red-500 text-sm">{error.fname}</p>)}
+              {error.name && (<p className="text-red-500 text-sm">{error.name}</p>)}
             </div>
 
             <div className="mb-4">
@@ -84,9 +100,9 @@ const SignupPage = () => {
                 className="w-full border border-gray-300 h-10 px-3 rounded"
                 placeholder="Create a password"
                 onChange={handleSignChange}
-                name="pass"
+                name="password"
               />
-              {error.pass && (<p className="text-red-500 text-sm">{error.pass}</p>)}
+              {error.password && (<p className="text-red-500 text-sm">{error.password}</p>)}
             </div>
 
             <div className="mb-6">
@@ -98,9 +114,9 @@ const SignupPage = () => {
                 className="w-full border border-gray-300 h-10 px-3 rounded"
                 placeholder="Confirm your password"
                 onChange={handleSignChange}
-                name="cpass"
+                name="confirmPassword"
               />
-              {error.cpass && (<p className="text-red-500 text-sm">{error.cpass}</p>)}
+              {error.confirmPassword && (<p className="text-red-500 text-sm">{error.confirmPassword}</p>)}
               {error.invalid && (<p className="text-red-500 text-sm">{error.invalid}</p>)}
             </div>
 

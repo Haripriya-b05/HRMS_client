@@ -17,6 +17,12 @@ import Payroll from "./Component/Admin/Pages/Payroll";
 import Reports from "./Component/Admin/Pages/Reports";
 import Settings from "./Component/Admin/Pages/Settings";
 import Performance from "./Component/Admin/Pages/Performance";
+import RequireAuth from "./Component/RequireAuth";
+import EmployeePanel from "./Component/Employee_Panel/EmployeePanel";
+import EmployeeDashboard from "./Component/Employee_Panel/Pages/EmployeeDashboard";
+import EmployeeProfile from "./Component/Employee_Panel/Pages/EmployeeProfile";
+import EmployeeAttendance from "./Component/Employee_Panel/Pages/EmployeeAttendance";
+
 
 function App() {
   return (
@@ -32,6 +38,7 @@ function App() {
           <Route path="/" element={<Navigate to="/login" replace/>} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route element={<RequireAuth/>}>
           <Route path="/panel" element={<Panel />}>
             {/* index use karne se ye bydefault yhi page open hoga */}
             <Route index element={<Dashboard />} />
@@ -44,7 +51,19 @@ function App() {
             <Route path="performance" element={<Performance />} />
             <Route path="reports" element={<Reports />} />
             <Route path="settings" element={<Settings/>} />
+            </Route>
+          </Route>
+
+
+          <Route path="employeePanel" element={<EmployeePanel/>}>
+          <Route index element={<EmployeeDashboard />} />
+
+            <Route path="dashboard" element={<EmployeeDashboard />} />
+            <Route path="profile" element={<EmployeeProfile />} />
+            <Route path="attendance" element={<EmployeeAttendance />} />
             
+
+
           </Route>
         </Routes>
       </BrowserRouter>
